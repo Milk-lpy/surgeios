@@ -1,5 +1,5 @@
-// Surge Information Panel - resilient edition
-// 多源查询实际出口 IP；分别按主策略、Binance、OKX 的真实业务策略发起请求。
+// Surge Information Panel - compact / home-aware edition
+// 多源查询实际出口 IP；家庭 SSID(wait/sky) 仅展示网关接管状态，外出网络才校验 Binance=TW / OKX=SG。
 
 const details = $surge.selectGroupDetails ? $surge.selectGroupDetails() : { decisions: {} };
 const decisions = details.decisions || {};
@@ -8,6 +8,7 @@ const cell = $network["cellular-data"] || {};
 const v4 = $network.v4 || {};
 const dns = $network.dns || [];
 const ssid = wifi.ssid || "";
+const isHome = ssid === "wait" || ssid === "sky";
 
 function safe(v, fallback = "-") {
   return (v === undefined || v === null || v === "") ? fallback : String(v);
@@ -109,6 +110,7 @@ function render() {
   lines.push(`网络：${networkName()}`);
   lines.push(`IPv4：${safe(v4.primaryAddress)}  路由：${safe(v4.primaryRouter)}`);
   if (dns.length) lines.push(`DNS：${dns.slice(0, 3).join(" / ")}`);
+  if (isHome) lines.push("模式：家庭网关接管 · Surge 不做二次代理");
   lines.push("");
   lines.push(`主策略：${safe(decisions["节点选择"])}  ·  币安：${safe(decisions["币安交易"], "默认")}`);
   lines.push(`欧易：${safe(decisions["欧易交易"], "默认")}  ·  GV：${safe(decisions["Google Voice"], "默认")}`);
@@ -120,7 +122,10 @@ function render() {
   let style = "info";
   let title = "Surge 智能网络";
 
-  if (results.binance && results.okx && results.binance.ok && results.okx.ok) {
+  if (isHome) {
+    style = "info";
+    title = "家庭网络 · 网关接管";
+  } else if (results.binance && results.okx && results.binance.ok && results.okx.ok) {
     const binanceOK = results.binance.cc === "TW";
     const okxOK = results.okx.cc === "SG";
     if (binanceOK && okxOK) {
@@ -130,6 +135,9 @@ function render() {
       style = "alert";
       title = "检查交易出口地区";
     }
+  } else {
+    style = "alert";
+    title = "出口查询异常";
   }
 
   $done({ title, content: lines.join("\n"), style });
@@ -144,9 +152,9 @@ setTimeout(() => {
   if (!done) {
     done = true;
     $done({
-      title: "Surge 智能网络",
-      content: `网络：${networkName()}\n出口查询超时，请稍后手动刷新`,
-      style: "alert"
+      title: isHome ? "家庭网络 · 网关接管" : "Surge 智能网络",
+      content: `网络：${networkName()}\n${isHome ? "家庭网关接管中\n" : ""}出口查询超时，请稍后手动刷新`,
+      style: isHome ? "info" : "alert"
     });
   }
 }, 18000);
