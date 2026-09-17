@@ -1,7 +1,5 @@
 #!name=Surge Subscription Studio
-#!desc=本机订阅转换器：将原始 Base64/明文 ss:// + anytls:// 订阅转换为 Surge 原生代理列表，并提供 http://surge-converter.test/subscription 作为新的 policy-path 订阅输出。附带本地管理前端、搜索筛选、统计和复制配置。
-#!arguments=subscription_url:
-#!arguments-desc=填入“不带 subType=surge”的原始通用订阅 URL。订阅 Token 仅保存在本机模块参数，不会展示在前端或写入公共仓库。
+#!desc=本机订阅转换器：在网页中输入原订阅，URL 仅保存于 Surge Persistent Store；将 Base64/明文 ss:// + anytls:// 转为 Surge 原生代理列表，并提供 http://surge-converter.test/subscription 作为本机 policy-path 输出。
 
 [General]
 force-http-engine-hosts = %APPEND% surge-converter.test
@@ -10,9 +8,7 @@ force-http-engine-hosts = %APPEND% surge-converter.test
 surge-converter.test = 127.0.0.1
 
 [Script]
-Subscription Studio 前端 = type=http-request, pattern=^http://surge-converter\.test(?:/$|/index\.html(?:\?|$)), script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio.js, script-update-interval=3600, timeout=15
-Subscription Studio 新订阅 = type=http-request, pattern=^http://surge-converter\.test/subscription(?:\?|$), script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-output.js, script-update-interval=3600, argument="{{{subscription_url}}}", timeout=30
-Subscription Studio API = type=http-request, pattern=^http://surge-converter\.test/api/, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-converter.js, script-update-interval=3600, argument="{{{subscription_url}}}", timeout=30
-打开 Subscription Studio = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-converter.js, script-update-interval=3600, argument="__OPEN_WEB__", timeout=5
-订阅转换并复制 = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-converter.js, script-update-interval=3600, argument="{{{subscription_url}}}", timeout=30
-复制上次转换结果 = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-converter.js, script-update-interval=3600, argument="__COPY_CACHE__", timeout=10
+Subscription Studio 设置 = type=http-request, pattern=^http://surge-converter\.test/api/source(?:\?|$), script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v2.js, script-update-interval=3600, requires-body=true, max-size=65536, timeout=15
+Subscription Studio 主服务 = type=http-request, pattern=^http://surge-converter\.test(?:/|$), script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v2.js, script-update-interval=3600, timeout=30
+打开 Subscription Studio = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v2.js, script-update-interval=3600, argument="__OPEN_WEB__", timeout=5
+复制当前节点 = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v2.js, script-update-interval=3600, argument="__COPY_CACHE__", timeout=10
