@@ -1,5 +1,5 @@
-// Surge Information Panel
-// 展示当前网络、策略选择，以及通过不同策略实际访问外网时的出口 IP / 国家 / ASN。
+// Surge Information Panel - resilient edition
+// 多源查询实际出口 IP；分别按主策略、Binance、OKX 的真实业务策略发起请求。
 
 const details = $surge.selectGroupDetails ? $surge.selectGroupDetails() : { decisions: {} };
 const decisions = details.decisions || {};
@@ -8,7 +8,6 @@ const cell = $network["cellular-data"] || {};
 const v4 = $network.v4 || {};
 const dns = $network.dns || [];
 const ssid = wifi.ssid || "";
-const isHome = ssid === "wait" || ssid === "sky";
 
 function safe(v, fallback = "-") {
   return (v === undefined || v === null || v === "") ? fallback : String(v);
@@ -20,33 +19,76 @@ function networkName() {
   return safe(v4.primaryInterface, "未知网络");
 }
 
+const providers = [
+  {
+    name: "Cloudflare",
+    url: "https://www.cloudflare.com/cdn-cgi/trace",
+    parse: (data) => {
+      const m = String(data || "").match(/(?:^|\n)ip=([^\n\r]+)/);
+      return m ? m[1].trim() : null;
+    }
+  },
+  {
+    name: "ipify",
+    url: "https://api64.ipify.org",
+    parse: (data) => {
+      const s = String(data || "").trim();
+      return /^[0-9a-fA-F:.]+$/.test(s) ? s : null;
+    }
+  },
+  {
+    name: "ifconfig.co",
+    url: "https://ifconfig.co/ip",
+    parse: (data) => {
+      const s = String(data || "").trim();
+      return /^[0-9a-fA-F:.]+$/.test(s) ? s : null;
+    }
+  }
+];
+
 function lookup(policy, label, callback) {
-  $httpClient.get({
-    url: "https://api.my-ip.io/ip",
-    policy: policy,
-    timeout: 5,
-    "auto-cookie": false
-  }, (error, response, data) => {
-    if (error || !data) {
-      callback({ label, policy, ok: false, text: `${label}: 查询失败` });
+  let index = 0;
+  let lastError = "";
+
+  function attempt() {
+    if (index >= providers.length) {
+      callback({ label, policy, ok: false, text: `${label}: 查询失败`, error: lastError });
       return;
     }
 
-    const ip = String(data).trim();
-    const cc = safe($utils.geoip(ip), "??");
-    const asn = safe($utils.ipasn(ip), "?");
-    const aso = safe($utils.ipaso(ip), "未知网络");
-    callback({
-      label,
+    const p = providers[index++];
+    $httpClient.get({
+      url: p.url,
       policy,
-      ok: true,
-      ip,
-      cc,
-      asn,
-      aso,
-      text: `${label}: ${ip} · ${cc} · AS${asn} ${aso}`
+      timeout: 5,
+      "auto-cookie": false,
+      headers: { "User-Agent": "Surge/5" }
+    }, (error, response, data) => {
+      const status = response && response.status ? response.status : 0;
+      const ip = (!error && status >= 200 && status < 300) ? p.parse(data) : null;
+      if (!ip) {
+        lastError = `${p.name}:${error || status || "parse"}`;
+        attempt();
+        return;
+      }
+
+      const cc = safe($utils.geoip(ip), "??");
+      const asn = safe($utils.ipasn(ip), "?");
+      const aso = safe($utils.ipaso(ip), "未知网络");
+      callback({
+        label,
+        policy,
+        ok: true,
+        ip,
+        cc,
+        asn,
+        aso,
+        text: `${label}: ${ip} · ${cc} · AS${asn} ${aso}`
+      });
     });
-  });
+  }
+
+  attempt();
 }
 
 const results = {};
@@ -68,8 +110,8 @@ function render() {
   lines.push(`IPv4：${safe(v4.primaryAddress)}  路由：${safe(v4.primaryRouter)}`);
   if (dns.length) lines.push(`DNS：${dns.slice(0, 3).join(" / ")}`);
   lines.push("");
-  lines.push(`主策略：${safe(decisions["节点选择"])}  ·  币安：${safe(decisions["币安交易"])}`);
-  lines.push(`欧易：${safe(decisions["欧易交易"])}  ·  GV：${safe(decisions["Google Voice"])}`);
+  lines.push(`主策略：${safe(decisions["节点选择"])}  ·  币安：${safe(decisions["币安交易"], "默认")}`);
+  lines.push(`欧易：${safe(decisions["欧易交易"], "默认")}  ·  GV：${safe(decisions["Google Voice"], "默认")}`);
   lines.push("");
   lines.push(results.normal ? results.normal.text : "普通出口: -");
   lines.push(results.binance ? results.binance.text : "Binance: -");
@@ -78,7 +120,7 @@ function render() {
   let style = "info";
   let title = "Surge 智能网络";
 
-  if (!isHome && results.binance && results.okx && results.binance.ok && results.okx.ok) {
+  if (results.binance && results.okx && results.binance.ok && results.okx.ok) {
     const binanceOK = results.binance.cc === "TW";
     const okxOK = results.okx.cc === "SG";
     if (binanceOK && okxOK) {
@@ -88,19 +130,16 @@ function render() {
       style = "alert";
       title = "检查交易出口地区";
     }
-  } else if (isHome) {
-    style = "info";
-    title = "家庭网络：交给网关处理";
   }
 
   $done({ title, content: lines.join("\n"), style });
 }
 
-lookup("通用网络", "普通出口", (v) => finishOne("normal", v));
-lookup("币安网络", "Binance", (v) => finishOne("binance", v));
-lookup("欧易网络", "OKX", (v) => finishOne("okx", v));
+// 用用户真正看到和选择的业务组进行探测，和实际 App 分流保持一致。
+lookup("节点选择", "普通出口", (v) => finishOne("normal", v));
+lookup("币安交易", "Binance", (v) => finishOne("binance", v));
+lookup("欧易交易", "OKX", (v) => finishOne("okx", v));
 
-// 防止外部 IP 服务异常导致 Panel 一直等待
 setTimeout(() => {
   if (!done) {
     done = true;
@@ -110,4 +149,4 @@ setTimeout(() => {
       style: "alert"
     });
   }
-}, 10000);
+}, 18000);
