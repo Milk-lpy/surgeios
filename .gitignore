@@ -1,0 +1,5 @@
+# Never commit private Surge profiles or credentials
+*.private.conf
+*.secret.conf
+.env
+.DS_Store
