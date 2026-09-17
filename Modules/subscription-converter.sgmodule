@@ -1,0 +1,8 @@
+#!name=Surge 订阅转换助手
+#!desc=将原始 Base64/明文 ss:// + anytls:// 通用订阅转换为 Surge [Proxy] 节点列表。模块不能直接修改 [Proxy]/[Proxy Group]，转换结果会通过通知一键复制到剪贴板。订阅地址仅保存在本机模块参数中。
+#!arguments=subscription_url:
+#!arguments-desc=填入“不带 subType=surge”的原始通用订阅 URL。不要把含 Token 的地址提交到公开仓库。
+
+[Script]
+订阅转换并复制 = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-converter.js, script-update-interval=3600, argument="{{{subscription_url}}}", timeout=30
+复制上次转换结果 = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-converter.js, script-update-interval=3600, argument="__COPY_CACHE__", timeout=10
