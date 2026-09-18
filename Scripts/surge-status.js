@@ -162,7 +162,7 @@ function tradeExitLines(icon, name, result, expectedCC) {
 }
 
 const results = {};
-let pending = 3;
+let pending = isHome ? 1 : 3;
 let done = false;
 
 function finishOne(key, value) {
@@ -175,12 +175,41 @@ function render() {
   if (done) return;
   done = true;
 
+  if (isHome) {
+    const lines = [];
+    lines.push(`📶 Wi-Fi · ${ssid}`);
+    lines.push(`📍 IPv4  ${safe(v4.primaryAddress)}`);
+    lines.push("");
+    lines.push("🔀 分流状态");
+    lines.push("🛡️ Surge    DIRECT");
+    lines.push("💰 Binance  上级网关接管");
+    lines.push("💱 OKX      上级网关接管");
+    lines.push("📞 GV       上级网关接管");
+    lines.push("");
+    lines.push("🌍 本机出口");
+    if (results.normal && results.normal.ok) {
+      lines.push(`${countryLabel(results.normal.cc)} · ${results.normal.ip}`);
+      lines.push(`AS${results.normal.asn} · ${results.normal.aso}`);
+    } else {
+      lines.push("❌ 查询失败");
+    }
+    lines.push("");
+    lines.push("ℹ️ 交易出口");
+    lines.push("Binance / OKX 最终出口由上级网关策略决定");
+    lines.push("Surge 本机不判定最终出口");
+
+    $done({
+      title: "🏠 家庭网络 · 网关接管",
+      content: lines.join("\n"),
+      style: "info"
+    });
+    return;
+  }
+
   let style = "info";
   let title = "🌐 Surge 智能网络";
 
-  if (isHome) {
-    title = "🏠 家庭网络 · 网关接管";
-  } else if (results.binance && results.okx && results.binance.ok && results.okx.ok) {
+  if (results.binance && results.okx && results.binance.ok && results.okx.ok) {
     const binanceOK = results.binance.cc === "TW";
     const okxOK = results.okx.cc === "SG";
     if (binanceOK && okxOK) {
@@ -199,9 +228,6 @@ function render() {
   lines.push("🌐 当前网络");
   lines.push(`📶 ${networkName()}`);
   lines.push(`📍 IPv4  ${safe(v4.primaryAddress)}`);
-  if (v4.primaryRouter) lines.push(`↗️ 路由   ${safe(v4.primaryRouter)}`);
-  if (dns.length) lines.push(`🧭 DNS    ${dns.slice(0, 3).join(" / ")}`);
-  if (isHome) lines.push("🏠 模式   上级网关接管 · Surge 不做二次代理");
 
   lines.push("");
   lines.push("🧩 当前策略");
@@ -211,7 +237,7 @@ function render() {
   lines.push(`📞 GV      ${decorateStrategy(decisions["Google Voice"] || "默认")}`);
 
   lines.push("");
-  lines.push("🌍 实际出口");
+  lines.push("🌍 出口状态");
   lines.push(...normalExitLines(results.normal));
   lines.push("");
   lines.push(...tradeExitLines("💰", "Binance", results.binance, "TW"));
@@ -222,8 +248,10 @@ function render() {
 }
 
 lookup("节点选择", "普通出口", (v) => finishOne("normal", v));
-lookup("币安交易", "Binance", (v) => finishOne("binance", v));
-lookup("欧易交易", "OKX", (v) => finishOne("okx", v));
+if (!isHome) {
+  lookup("币安交易", "Binance", (v) => finishOne("binance", v));
+  lookup("欧易交易", "OKX", (v) => finishOne("okx", v));
+}
 
 setTimeout(() => {
   if (!done) {
