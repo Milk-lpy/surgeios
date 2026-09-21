@@ -1,0 +1,13 @@
+# OKX-only patch layer
+DOMAIN-SUFFIX,okx.com
+DOMAIN-SUFFIX,okex.com
+DOMAIN,wallet.okex.org
+DOMAIN-SUFFIX,oklink.com
+DOMAIN-SUFFIX,coinall.ltd
+DOMAIN-SUFFIX,okx-dns.com
+DOMAIN-SUFFIX,okx-dns1.com
+DOMAIN-SUFFIX,okx-dns2.com
+DOMAIN-SUFFIX,okx.ac
+DOMAIN-SUFFIX,okx.cab
+DOMAIN,okx.com.cdn.cloudflare.net
+DOMAIN-SUFFIX,xlayer.tech
