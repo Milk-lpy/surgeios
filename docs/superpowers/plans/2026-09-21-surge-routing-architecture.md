@@ -65,6 +65,7 @@
 **Files:**
 - Create: `tools/surge_routing.py`
 - Create: `tools/validate_surge_routing.py`
+- Create: `tests/__init__.py`
 - Create: `tests/test_surge_routing.py`
 - Create: `tests/fixtures/minimal-private.conf`
 - Create: `tests/fixtures/invalid-routing.conf`
@@ -80,7 +81,7 @@
 
 - [ ] **Step 1: Write the failing unit tests**
 
-Create `tests/test_surge_routing.py` with these exact invariants:
+Create an empty `tests/__init__.py`, then create `tests/test_surge_routing.py` with these exact invariants:
 
 ```python
 import pathlib
@@ -320,7 +321,7 @@ Expected: PASS for the invalid-fixture rejection and section-preservation behavi
 - [ ] **Step 6: Commit**
 
 ```bash
-git add tools/surge_routing.py tools/validate_surge_routing.py tests/
+git add tools/surge_routing.py tools/validate_surge_routing.py tests/__init__.py tests/test_surge_routing.py tests/fixtures/
 git commit -m "test: add Surge routing architecture validator"
 ```
 
@@ -341,7 +342,7 @@ git commit -m "test: add Surge routing architecture validator"
 - Modify: `tests/test_surge_routing.py`
 
 **Interfaces:**
-- Produces public Surge-compatible rule lists referenced through `raw.githubusercontent.com/Milk-lpy/surgeios/main/Rules/<name>.list`.
+- Produces public Surge-compatible rule lists referenced through `raw.githubusercontent.com/Milk-lpy/surgeios/main/Rules/Microsoft-Extra.list` and the eight sibling Extra-list URLs.
 - Lists contain rules only, never target policy names or credentials.
 
 - [ ] **Step 1: Add failing tests for critical Extra coverage**
@@ -1048,7 +1049,7 @@ If no audit document is created, commit only the test changes.
 
 - [ ] **Step 1: Materialize the user's current private config locally**
 
-Use the conversation file reference rather than reconstructing the filename or secrets from chat text. Confirm the exact container path exists.
+Use the conversation artifact named `Surge全功能智能版-稳定性优先V2-去GV版-MITM.conf` and materialize it to the exact local path `/mnt/data/surge-routing-private/Surge-private-source.conf`. Confirm that exact path exists before reading it; never reconstruct secrets from chat text.
 
 - [ ] **Step 2: Write a failing private-generation check**
 
@@ -1062,7 +1063,7 @@ Run Python using the library:
 from pathlib import Path
 from tools.surge_routing import replace_sections
 
-private_path = Path("/mnt/data/<materialized-private-config>")
+private_path = Path("/mnt/data/surge-routing-private/Surge-private-source.conf")
 template_path = Path("Surge全功能智能版.example.conf")
 output_path = Path("/mnt/data/Surge全功能智能版-完整分流版.conf")
 
@@ -1101,7 +1102,7 @@ Use boolean-only checks:
 ```python
 from pathlib import Path
 
-source = Path("/mnt/data/<materialized-private-config>").read_text(encoding="utf-8")
+source = Path("/mnt/data/surge-routing-private/Surge-private-source.conf").read_text(encoding="utf-8")
 output = Path("/mnt/data/Surge全功能智能版-完整分流版.conf").read_text(encoding="utf-8")
 
 checks = {
