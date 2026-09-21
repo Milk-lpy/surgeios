@@ -184,7 +184,6 @@ function render() {
     lines.push("🛡️ Surge    DIRECT");
     lines.push("💰 Binance  上级网关接管");
     lines.push("💱 OKX      上级网关接管");
-    lines.push("📞 GV       上级网关接管");
     lines.push("");
     lines.push("🌍 本机出口");
     if (results.normal && results.normal.ok) {
@@ -234,7 +233,6 @@ function render() {
   lines.push(`🚀 主策略  ${decorateStrategy(decisions["节点选择"])}`);
   lines.push(`💰 币安    ${decorateStrategy(decisions["币安交易"] || "默认")}`);
   lines.push(`💱 欧易    ${decorateStrategy(decisions["欧易交易"] || "默认")}`);
-  lines.push(`📞 GV      ${decorateStrategy(decisions["Google Voice"] || "默认")}`);
 
   lines.push("");
   lines.push("🌍 出口状态");
