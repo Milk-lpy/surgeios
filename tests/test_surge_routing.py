@@ -187,5 +187,32 @@ class SurgeRoutingTests(unittest.TestCase):
         self.assertNotIn("event-name=network-changed", active)
         self.assertNotIn("event-name=engine-started", active)
 
+    def test_microsoft_has_multi_source_coverage(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        required = [
+            "Rules/Microsoft-Extra.list,🪟 Microsoft",
+            "/Microsoft/Microsoft.list,🪟 Microsoft",
+            "/OneDrive/OneDrive.list,🪟 Microsoft",
+            "/Teams/Teams.list,🪟 Microsoft",
+            "/MicrosoftEdge/MicrosoftEdge.list,🪟 Microsoft",
+            "/Bing/Bing.list,🪟 Microsoft",
+            "/Copilot/Copilot.list,🪟 Microsoft",
+            "SukkaW/Surge/master/Source/non_ip/microsoft.conf,🪟 Microsoft",
+        ]
+        for marker in required:
+            self.assertIn(marker, text)
+
+    def test_ai_precedes_google_and_apple(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        self.assertLess(text.index("Rules/AI-Extra.list"), text.index("Rules/Google-Extra.list"))
+        self.assertLess(text.index("Rules/AI-Extra.list"), text.index("Rules/Apple-Extra.list"))
+
+    def test_crypto_aggregate_lists_are_not_bound_to_trade_groups(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        for line in text.splitlines():
+            if "Cryptocurrency/Cryptocurrency.list" in line or "/Crypto/Crypto.list" in line:
+                self.assertNotIn("💰 币安交易", line)
+                self.assertNotIn("💱 欧易交易", line)
+
 if __name__ == "__main__":
     unittest.main()
