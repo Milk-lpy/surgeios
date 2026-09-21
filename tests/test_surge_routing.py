@@ -225,5 +225,11 @@ class SurgeRoutingTests(unittest.TestCase):
         self.assertNotIn('lookup("币安交易"', text)
         self.assertNotIn('lookup("欧易交易"', text)
 
+    def test_specific_media_and_game_rules_precede_broad_vendor_rules(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        self.assertLess(text.index("Rules/Media-Extra.list"), text.index("Rules/Google-Extra.list"))
+        self.assertLess(text.index("Rules/Games-Extra.list"), text.index("Rules/Microsoft-Extra.list"))
+        self.assertLess(text.index("/SteamCN/SteamCN.list"), text.index("Rules/Games-Extra.list"))
+
 if __name__ == "__main__":
     unittest.main()
