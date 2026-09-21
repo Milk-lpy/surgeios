@@ -1,0 +1,8 @@
+# Binance-only patch layer
+DOMAIN-SUFFIX,binance.com
+DOMAIN-SUFFIX,binance.info
+DOMAIN-SUFFIX,binance.click
+DOMAIN-SUFFIX,binance.me
+DOMAIN-SUFFIX,binance.us
+DOMAIN-SUFFIX,bncstatic.com
+DOMAIN,binanceseamg.dataplane.rudderstack.com
