@@ -144,5 +144,48 @@ class SurgeRoutingTests(unittest.TestCase):
         self.assertNotIn("steamchina", text.lower())
         self.assertNotIn("steamserver.net", text.lower())
 
+    def test_app_default_groups_match_home_and_external_design(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        groups = parse_policy_groups(text)
+        expected_defaults = {
+            "欧易默认": "default=新加坡交易稳定",
+            "币安默认": "default=台湾交易稳定",
+            "AI默认": "default=美国稳定",
+            "Google默认": "default=通用网络",
+            "Microsoft默认": "default=DIRECT",
+            "Telegram默认": "default=通用网络",
+            "Apple默认": "default=DIRECT",
+            "流媒体默认": "default=通用网络",
+            "游戏平台默认": "default=通用网络",
+        }
+        for group, external_default in expected_defaults.items():
+            self.assertIn(group, groups)
+            line = groups[group]
+            self.assertIn(external_default, line)
+            self.assertIn('"SSID:wait"=DIRECT', line)
+            self.assertIn('"SSID:sky"=DIRECT', line)
+            self.assertNotIn("sky6_5G", line)
+            self.assertIn("hidden=true", line)
+
+    def test_smart_pool_keeps_b_priority_and_is_not_full_subscription_regex(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        groups = parse_policy_groups(text)
+        smart = groups["自动选择"]
+        self.assertIn("B[0-9]+", smart)
+        self.assertIn("policy-priority", smart)
+        self.assertNotIn("policy-regex-filter=.+", smart)
+
+    def test_stable_v2_general_and_script_settings_remain(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        active = "\n".join(
+            line for line in text.splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        )
+        self.assertIn("encrypted-dns-server = https://dns.alidns.com/dns-query", active)
+        self.assertNotIn("doh.pub", active)
+        self.assertIn("auto-suspend = false", active)
+        self.assertNotIn("event-name=network-changed", active)
+        self.assertNotIn("event-name=engine-started", active)
+
 if __name__ == "__main__":
     unittest.main()
