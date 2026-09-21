@@ -1,0 +1,19 @@
+# Microsoft critical patch layer: Outlook / M365 / auth / OneDrive / SharePoint / Teams
+DOMAIN-SUFFIX,outlook.com
+DOMAIN-SUFFIX,outlookmobile.com
+DOMAIN-SUFFIX,hotmail.com
+DOMAIN-SUFFIX,office.com
+DOMAIN-SUFFIX,office.net
+DOMAIN-SUFFIX,office365.com
+DOMAIN-SUFFIX,microsoftonline.com
+DOMAIN-SUFFIX,msauth.net
+DOMAIN-SUFFIX,msftauth.net
+DOMAIN-SUFFIX,msftidentity.com
+DOMAIN-SUFFIX,live.com
+DOMAIN-SUFFIX,live.net
+DOMAIN-SUFFIX,onedrive.com
+DOMAIN-SUFFIX,1drv.com
+DOMAIN-SUFFIX,sharepoint.com
+DOMAIN-SUFFIX,sharepointonline.com
+DOMAIN-SUFFIX,skype.com
+DOMAIN-SUFFIX,teams.microsoft.com
