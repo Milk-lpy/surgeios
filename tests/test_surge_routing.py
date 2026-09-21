@@ -214,5 +214,16 @@ class SurgeRoutingTests(unittest.TestCase):
                 self.assertNotIn("💰 币安交易", line)
                 self.assertNotIn("💱 欧易交易", line)
 
+    def test_status_script_uses_current_trade_group_names(self):
+        text = (ROOT / "Scripts/surge-status.js").read_text(encoding="utf-8")
+        self.assertIn('decisions["💰 币安交易"]', text)
+        self.assertIn('decisions["💱 欧易交易"]', text)
+        self.assertIn('lookup("💰 币安交易"', text)
+        self.assertIn('lookup("💱 欧易交易"', text)
+        self.assertNotIn('decisions["币安交易"]', text)
+        self.assertNotIn('decisions["欧易交易"]', text)
+        self.assertNotIn('lookup("币安交易"', text)
+        self.assertNotIn('lookup("欧易交易"', text)
+
 if __name__ == "__main__":
     unittest.main()
