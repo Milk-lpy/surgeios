@@ -70,5 +70,79 @@ class SurgeRoutingTests(unittest.TestCase):
         self.assertIn("[Rule]", result)
         self.assertIn("Rules/Microsoft-Extra.list", result)
 
+    def test_extra_rule_files_cover_critical_domains(self):
+        required = {
+            "Microsoft-Extra.list": [
+                "DOMAIN-SUFFIX,outlook.com",
+                "DOMAIN-SUFFIX,outlookmobile.com",
+                "DOMAIN-SUFFIX,office365.com",
+                "DOMAIN-SUFFIX,microsoftonline.com",
+                "DOMAIN-SUFFIX,onedrive.com",
+                "DOMAIN-SUFFIX,sharepoint.com",
+            ],
+            "Google-Extra.list": [
+                "DOMAIN-SUFFIX,google.com",
+                "DOMAIN-SUFFIX,googleapis.com",
+                "DOMAIN-SUFFIX,googlevoice.com",
+            ],
+            "AI-Extra.list": [
+                "DOMAIN-SUFFIX,openai.com",
+                "DOMAIN-SUFFIX,chatgpt.com",
+                "DOMAIN-SUFFIX,anthropic.com",
+                "DOMAIN-SUFFIX,claude.ai",
+                "DOMAIN-SUFFIX,perplexity.ai",
+                "DOMAIN-SUFFIX,gemini.google.com",
+            ],
+            "Telegram-Extra.list": [
+                "DOMAIN-SUFFIX,telegram.org",
+                "DOMAIN-SUFFIX,t.me",
+                "DOMAIN-SUFFIX,telegra.ph",
+            ],
+            "Apple-Extra.list": [
+                "DOMAIN-SUFFIX,apple.com",
+                "DOMAIN-SUFFIX,icloud.com",
+                "DOMAIN-SUFFIX,icloud-content.com",
+            ],
+            "Media-Extra.list": [
+                "DOMAIN-SUFFIX,youtube.com",
+                "DOMAIN-SUFFIX,googlevideo.com",
+                "DOMAIN-SUFFIX,netflix.com",
+                "DOMAIN-SUFFIX,nflxvideo.net",
+                "DOMAIN-SUFFIX,disneyplus.com",
+                "DOMAIN-SUFFIX,spotify.com",
+            ],
+            "Games-Extra.list": [
+                "DOMAIN-SUFFIX,steampowered.com",
+                "DOMAIN-SUFFIX,steamcommunity.com",
+                "DOMAIN-SUFFIX,nintendo.net",
+                "DOMAIN-SUFFIX,xboxlive.com",
+                "DOMAIN-SUFFIX,playstation.net",
+                "DOMAIN-SUFFIX,epicgames.com",
+                "DOMAIN-SUFFIX,battle.net",
+            ],
+            "Binance-Extra.list": [
+                "DOMAIN-SUFFIX,binance.com",
+                "DOMAIN-SUFFIX,binance.info",
+                "DOMAIN-SUFFIX,binance.click",
+            ],
+            "OKX-Extra.list": [
+                "DOMAIN-SUFFIX,okx.com",
+                "DOMAIN-SUFFIX,okex.com",
+                "DOMAIN-SUFFIX,oklink.com",
+                "DOMAIN-SUFFIX,okx-dns.com",
+            ],
+        }
+        for filename, rules in required.items():
+            text = (ROOT / "Rules" / filename).read_text(encoding="utf-8")
+            for rule in rules:
+                self.assertIn(rule, text)
+            self.assertNotIn("PRIVATE_TEST_ONLY", text)
+            self.assertNotIn("ca-p12", text)
+
+    def test_games_extra_does_not_capture_steam_cn(self):
+        text = (ROOT / "Rules/Games-Extra.list").read_text(encoding="utf-8")
+        self.assertNotIn("steamchina", text.lower())
+        self.assertNotIn("steamserver.net", text.lower())
+
 if __name__ == "__main__":
     unittest.main()
