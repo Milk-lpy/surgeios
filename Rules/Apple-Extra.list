@@ -1,0 +1,6 @@
+# General Apple/iCloud patch layer. Apple Intelligence belongs in AI.
+DOMAIN-SUFFIX,apple.com
+DOMAIN-SUFFIX,icloud.com
+DOMAIN-SUFFIX,icloud-content.com
+DOMAIN-SUFFIX,mzstatic.com
+DOMAIN-SUFFIX,apple-dns.net
