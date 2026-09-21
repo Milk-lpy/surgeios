@@ -1,0 +1,6 @@
+# Telegram critical domain patch layer
+DOMAIN-SUFFIX,telegram.org
+DOMAIN-SUFFIX,telegram.me
+DOMAIN-SUFFIX,t.me
+DOMAIN-SUFFIX,telegra.ph
+DOMAIN-SUFFIX,telegram-cdn.org
