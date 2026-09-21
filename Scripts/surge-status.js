@@ -231,8 +231,8 @@ function render() {
   lines.push("");
   lines.push("🧩 当前策略");
   lines.push(`🚀 主策略  ${decorateStrategy(decisions["节点选择"])}`);
-  lines.push(`💰 币安    ${decorateStrategy(decisions["币安交易"] || "默认")}`);
-  lines.push(`💱 欧易    ${decorateStrategy(decisions["欧易交易"] || "默认")}`);
+  lines.push(`💰 币安    ${decorateStrategy(decisions["💰 币安交易"] || "默认")}`);
+  lines.push(`💱 欧易    ${decorateStrategy(decisions["💱 欧易交易"] || "默认")}`);
 
   lines.push("");
   lines.push("🌍 出口状态");
@@ -247,8 +247,8 @@ function render() {
 
 lookup("节点选择", "普通出口", (v) => finishOne("normal", v));
 if (!isHome) {
-  lookup("币安交易", "Binance", (v) => finishOne("binance", v));
-  lookup("欧易交易", "OKX", (v) => finishOne("okx", v));
+  lookup("💰 币安交易", "Binance", (v) => finishOne("binance", v));
+  lookup("💱 欧易交易", "OKX", (v) => finishOne("okx", v));
 }
 
 setTimeout(() => {
