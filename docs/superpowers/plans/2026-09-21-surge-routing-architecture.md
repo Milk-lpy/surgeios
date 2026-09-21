@@ -841,7 +841,7 @@ RULE-SET,https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Rules/AI-Extra
 RULE-SET,https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/ai.conf,🤖 AI 服务,extended-matching
 RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/OpenAI/OpenAI.list,🤖 AI 服务,extended-matching
 RULE-SET,https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Surge/Claude/Claude.list,🤖 AI 服务,extended-matching
-RULE-SET,https://ruleset.skk.moe/List/non_ip/apple_intelligence.conf,🤖 AI 服务,extended-matching
+RULE-SET,https://raw.githubusercontent.com/SukkaW/Surge/master/Source/non_ip/apple_intelligence.conf,🤖 AI 服务,extended-matching
 ```
 
 **Layer 4 — Microsoft / Google / Telegram / Apple:**
