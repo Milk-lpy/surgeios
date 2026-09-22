@@ -231,5 +231,16 @@ class SurgeRoutingTests(unittest.TestCase):
         self.assertLess(text.index("Rules/Games-Extra.list"), text.index("Rules/Microsoft-Extra.list"))
         self.assertLess(text.index("/SteamCN/SteamCN.list"), text.index("Rules/Games-Extra.list"))
 
+    def test_region_groups_use_smart_b_priority(self):
+        text = EXAMPLE.read_text(encoding="utf-8")
+        groups = parse_policy_groups(text)
+        for region in REGIONS:
+            self.assertIn(region, groups)
+            line = groups[region]
+            self.assertTrue(line.startswith("smart,"))
+            self.assertIn('policy-priority="(?i)B[0-9]+:0.45"', line)
+            self.assertIn("evaluate-before-use=true", line)
+            self.assertNotIn("tolerance=100", line)
+
 if __name__ == "__main__":
     unittest.main()
