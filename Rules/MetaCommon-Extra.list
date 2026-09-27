@@ -1,0 +1,5 @@
+# Shared Meta account / corporate / common services
+# Shared authentication stays in Meta Common so it does not force all Meta apps into the Meta AI policy.
+DOMAIN,auth.meta.com
+DOMAIN-SUFFIX,meta.com
+DOMAIN-SUFFIX,about.fb.com
