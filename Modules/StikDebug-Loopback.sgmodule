@@ -1,0 +1,9 @@
+#!name=StikDebug Loopback
+#!desc=Use Surge instead of LocalDevVPN (Surge iOS 5.23.0+)
+
+[General]
+ipv6-vif = disabled
+tun-included-routes = %INSERT% 10.7.0.1/32
+
+[IP Rewrite]
+10.7.0.1 = reflect
