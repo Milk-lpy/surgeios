@@ -1,5 +1,5 @@
 #!name=Surge Subscription Studio
-#!desc=本机订阅转换器：在网页中输入原订阅，URL 仅保存于 Surge Persistent Store；将 Base64/明文 ss:// + anytls:// 转为 Surge 原生代理列表，并提供 http://surge-converter.test/subscription 作为本机 policy-path 输出。
+#!desc=本机订阅转换器：原订阅 URL 仅保存于 Surge Persistent Store；支持明文/Base64 ss://、anytls:// 以及 Surge 原生 SS/AnyTLS 节点列表，并对 HTML/JSON/YAML 错误响应给出明确提示。
 
 [General]
 force-http-engine-hosts = %APPEND% surge-converter.test
