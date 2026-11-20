@@ -1,0 +1,12 @@
+# Apple Intelligence, PCC and extensions
+DOMAIN,gspe1-ssl.ls.apple.com
+# PCC and extension endpoints documented by Apple
+DOMAIN,apple-relay.apple.com
+DOMAIN,apple-relay.cloudflare.com
+DOMAIN,apple-relay.fastly-edge.com
+DOMAIN,cp4.cloudflare.com
+# Additional domains
+DOMAIN-SUFFIX,apple-relay.akamaized.net
+DOMAIN,apple-relay.mask.apple-dns.net
+DOMAIN,apple-carry-relay.cloudflare.com
+DOMAIN-SUFFIX,app.apple.com

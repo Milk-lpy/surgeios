@@ -1,0 +1,7 @@
+# General Google / Google Voice patch layer. AI endpoints belong in AI-Extra.
+DOMAIN-SUFFIX,google.com
+DOMAIN-SUFFIX,googleapis.com
+DOMAIN-SUFFIX,gstatic.com
+DOMAIN-SUFFIX,googleusercontent.com
+DOMAIN-SUFFIX,googlevoice.com
+DOMAIN,voice.google.com

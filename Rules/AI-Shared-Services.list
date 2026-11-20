@@ -1,0 +1,21 @@
+# Shared authentication, billing and service endpoints
+DOMAIN-SUFFIX,auth0.com
+DOMAIN-SUFFIX,intercom.io
+DOMAIN-SUFFIX,intercomcdn.com
+DOMAIN-SUFFIX,sentry.io
+DOMAIN-SUFFIX,stripe.com
+DOMAIN-SUFFIX,segment.io
+DOMAIN-SUFFIX,datadoghq.com
+DOMAIN-SUFFIX,storage.googleapis.com
+DOMAIN-SUFFIX,static.cloudflareinsights.com
+DOMAIN-SUFFIX,cdn.usefathom.com
+DOMAIN-SUFFIX,launchdarkly.com
+DOMAIN-SUFFIX,featuregates.org
+DOMAIN-SUFFIX,statsigapi.net
+DOMAIN-SUFFIX,algolia.net
+DOMAIN-SUFFIX,identrust.com
+DOMAIN-SUFFIX,client-api.arkoselabs.com
+DOMAIN-SUFFIX,observeit.net
+DOMAIN-SUFFIX,api.statsig.com
+DOMAIN-SUFFIX,challenges.cloudflare.com
+DOMAIN-SUFFIX,workos.com

@@ -1,0 +1,13 @@
+# International game platform patch layer. SteamCN stays DIRECT in main config.
+DOMAIN-SUFFIX,steampowered.com
+DOMAIN-SUFFIX,steamcommunity.com
+DOMAIN-SUFFIX,nintendo.com
+DOMAIN-SUFFIX,nintendo.net
+DOMAIN-SUFFIX,xbox.com
+DOMAIN-SUFFIX,xboxlive.com
+DOMAIN-SUFFIX,playstation.com
+DOMAIN-SUFFIX,playstation.net
+DOMAIN-SUFFIX,epicgames.com
+DOMAIN-SUFFIX,unrealengine.com
+DOMAIN-SUFFIX,battle.net
+DOMAIN-SUFFIX,blizzard.com
