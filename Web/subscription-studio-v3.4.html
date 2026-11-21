@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f6fb">
+<meta name="color-scheme" content="light dark">
+<title>Subscription Studio v3.4 · Surge 6</title>
+<style>
+:root{
+color-scheme:light;--bg:#f4f6fb;--surface:#fff;--surface2:#f7f9fd;--text:#16213b;
+--muted:#7c879d;--border:#e7ecf4;--accent:#5564ea;--accent-soft:#ecefff;
+--green:#208b66;--green-bg:#e9f7f0;--red:#d94b58;--red-bg:#fff0f1;
+--orange:#c48338;--orange-bg:#fff4e6;--shadow:0 14px 38px rgba(29,43,82,.045)
+}
+@media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#0c1221;--surface:#151d30;--surface2:#1d2740;--text:#f3f5fc;--muted:#9caac0;--border:#2a3550;--accent:#9aa7ff;--accent-soft:#253059;--green:#55cba3;--green-bg:#1b3a37;--red:#ff8994;--red-bg:#3b242e;--orange:#f3be7c;--orange-bg:#3d3029;--shadow:0 16px 40px rgba(0,0,0,.12)}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Helvetica Neue",sans-serif}
+button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-color:transparent}button:disabled{opacity:.48;cursor:default}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(93,108,250,.35);outline-offset:2px}
+[hidden]{display:none!important}
+.app{width:min(100%,1020px);padding:24px 26px max(48px,env(safe-area-inset-bottom));margin:auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}.brand-icon{width:42px;height:42px;flex:none;display:grid;place-items:center;border-radius:14px;background:#172344;color:#fff;font-size:21px;font-weight:850;letter-spacing:-1.5px;box-shadow:0 6px 16px rgba(24,36,76,.16)}
+.brand-name{font-size:15px;font-weight:770;line-height:1.2;white-space:nowrap}.brand-sub{margin-top:3px;font-size:11px;color:var(--muted);letter-spacing:.035em}
+.status{display:inline-flex;gap:8px;align-items:center;flex:none;max-width:46%;font-size:12px;font-weight:680;padding:8px 11px;border-radius:100px;background:var(--green-bg);color:var(--green);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.status.warn{background:var(--orange-bg);color:var(--orange)}.status.off{background:var(--surface2);color:var(--muted)}.status.bad{background:var(--red-bg);color:var(--red)}
+.hero{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:end;justify-content:space-between;gap:20px;background:linear-gradient(119deg,#182447 6%,#263b80 72%,#5362ca 125%);color:#fff;min-height:198px;padding:26px 30px;border-radius:27px;box-shadow:0 18px 30px rgba(34,52,117,.12)}
+.hero:before{content:"";position:absolute;z-index:-1;right:-115px;top:-235px;width:540px;height:540px;border-radius:50%;background:radial-gradient(circle,rgba(174,177,255,.34),transparent 65%)}
+.hero:after{content:"";position:absolute;z-index:-1;left:38%;bottom:-170px;width:380px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(66,106,255,.28),transparent 66%)}
+.eyebrow{font-size:10px;font-weight:800;letter-spacing:.22em;color:#c7d3ff}.hero h1{font-size:31px;letter-spacing:-.045em;font-weight:800;margin:13px 0 8px;line-height:1.1}.hero-meta{font-size:12px;line-height:1.5;color:#cdd7fb}
+.hero-actions{display:flex;gap:9px;flex-wrap:wrap;flex:none}.btn{border:1px solid var(--border);background:var(--surface);color:var(--text);min-height:40px;padding:9px 13px;border-radius:12px;font-size:12px;font-weight:720;transition:transform .14s,background .14s}.btn:active{transform:scale(.97)}
+.btn-primary{border-color:transparent;background:var(--accent);color:white;box-shadow:0 6px 16px rgba(85,100,234,.17)}
+.btn-hero{background:#fff;border-color:#fff;color:#27346e;min-width:102px}.btn-glass{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.25);color:#fff}
+.btn-danger{color:var(--red);border-color:rgba(217,75,88,.2);background:var(--red-bg)}
+.metrics{display:grid;grid-template-columns:1.35fr repeat(4,1fr);gap:12px;margin:16px 0 24px}
+.metric{min-width:0;min-height:104px;border:1px solid var(--border);background:var(--surface);padding:17px 18px;border-radius:19px;box-shadow:var(--shadow)}
+.metric .value{font-size:29px;font-weight:800;line-height:1.05;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.metric .label{font-size:12px;margin-top:12px;color:var(--muted);font-weight:580}.metric.first{background:linear-gradient(155deg,var(--surface),var(--accent-soft));border-color:rgba(115,128,227,.16)}
+.tabs{display:flex;gap:5px;padding:5px;background:var(--surface);border:1px solid var(--border);border-radius:16px;width:max-content;max-width:100%;margin:0 0 16px}
+.tab{border:0;border-radius:12px;background:transparent;color:var(--muted);font-size:13px;font-weight:710;padding:11px 19px;min-width:86px}
+.tab.active{background:var(--accent-soft);color:var(--accent)}
+.tab em{font-style:normal;font-size:10px;margin-left:5px;background:var(--surface2);padding:2px 6px;border-radius:8px}
+.stack{display:grid;gap:14px}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.panel{border:1px solid var(--border);background:var(--surface);border-radius:22px;padding:21px;box-shadow:var(--shadow);min-width:0}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.panel h2{font-size:16px;letter-spacing:-.025em;margin:0;font-weight:760}
+.panel .mini{font-size:11px;color:var(--muted)}.subtle{font-size:12px;color:var(--muted)}
+.host{font-size:14px;font-weight:680;word-break:break-all;min-height:27px}.host small{font-size:11px;color:var(--muted);font-weight:500;margin-left:5px}
+.inputline{display:flex;gap:9px;margin-top:16px;min-width:0}
+.textinput{width:100%;min-width:0;height:43px;outline:none;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:0 13px;color:var(--text);font:12px ui-monospace,SFMono-Regular,Menlo,monospace}
+.textinput:focus{border-color:var(--accent)}
+ .compat-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px;padding-top:13px;border-top:1px solid var(--border)}.compat-line label{font-size:12px;font-weight:700;color:var(--text)}.compat-line .select{max-width:200px;flex:1}.mini-label{font-size:11px;color:var(--muted);margin-bottom:7px}.endpoint{min-height:44px;border:1px solid var(--border);border-radius:13px;background:var(--surface2);padding:13px;font:12px ui-monospace,SFMono-Regular,Menlo,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.output-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.error{border-color:rgba(217,75,88,.24);background:var(--surface)}.error.notice{border-color:rgba(196,131,56,.27)}.error.notice .bad-count{color:var(--orange)}
+.error .panel-head{margin-bottom:10px}.bad-count{color:var(--red);font-size:13px;font-weight:750}
+.issue{display:flex;align-items:baseline;gap:9px;padding:10px 0;border-top:1px solid var(--border);font-size:12px}
+.issue strong{font-weight:750;white-space:nowrap;font-variant-numeric:tabular-nums}.issue span{color:var(--muted);line-height:1.45}
+.issue more{display:block}
+.node-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px}.searchbar{flex:1;position:relative}.searchbar:before{content:"⌕";position:absolute;left:13px;top:5px;color:var(--muted);font-size:26px}.searchbar input{padding-left:40px}
+.filters{display:flex;gap:7px;overflow-x:auto;white-space:nowrap;scrollbar-width:none;margin-bottom:16px;padding-bottom:3px}.filters::-webkit-scrollbar{display:none}
+.filter{flex:none;background:var(--surface2);border:1px solid var(--border);border-radius:12px;color:var(--muted);padding:8px 14px;font-size:12px;font-weight:690}.filter.active{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.node-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.node{display:flex;gap:12px;align-items:center;min-width:0;border:1px solid var(--border);background:var(--surface2);border-radius:14px;padding:12px}
+.node-mark{width:34px;height:34px;flex:none;display:grid;place-items:center;border-radius:11px;background:var(--accent-soft);color:var(--accent);font-size:12px;font-weight:790}
+.node-main{min-width:0;flex:1}.node-name{font-size:12px;font-weight:740;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.node-address{font-size:10px;color:var(--muted);margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{border-radius:8px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:5px 6px;font-weight:680}
+.empty{padding:40px 10px;text-align:center;color:var(--muted);font-size:13px}.count-note{font-size:11px;color:var(--muted);text-align:right}
+.logtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.select{border:1px solid var(--border);border-radius:11px;background:var(--surface2);color:var(--text);font-size:12px;padding:9px;min-height:40px}
+.loglist{display:grid;gap:10px}.log-entry{border:1px solid var(--border);border-radius:14px;padding:14px 15px;background:var(--surface2)}
+.log-top{display:flex;align-items:center;gap:8px;min-width:0}.log-dot{height:9px;width:9px;border-radius:50%;background:var(--green);flex:none}.log-entry.error .log-dot{background:var(--red)}.log-entry.warning .log-dot{background:var(--orange)}
+.log-title{font-size:13px;font-weight:750}.log-time{font-size:11px;color:var(--muted);margin-left:auto;white-space:nowrap;font-variant-numeric:tabular-nums}
+.log-meta{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5} .log-issues{margin-top:10px;border-top:1px solid var(--border);padding-top:6px}.log-issues summary{list-style:none;cursor:pointer;font-size:11px;font-weight:720;color:var(--accent);padding:8px 0}.log-issues summary::-webkit-details-marker{display:none}.log-issues summary:after{content:'⌄';padding-left:8px}.log-issues[open] summary:after{content:'⌃'}.log-issue{padding-top:6px;font-size:11px;color:var(--muted);line-height:1.5}
+.toast{position:fixed;z-index:15;bottom:calc(22px + env(safe-area-inset-bottom));left:50%;transform:translate(-50%,10px);opacity:0;pointer-events:none;padding:11px 16px;max-width:calc(100vw - 32px);background:#17223a;color:#fff;font-size:12px;font-weight:650;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.2);transition:opacity .2s,transform .2s;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px){.app{padding:15px 15px max(38px,env(safe-area-inset-bottom))}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.metric.first{grid-column:span 2}.hero{padding:24px;border-radius:23px;min-height:195px;display:block}.hero h1{font-size:28px}.hero-actions{margin-top:23px}.two{grid-template-columns:1fr}.panel{padding:18px;border-radius:19px}.node-list{grid-template-columns:1fr}.top{margin:6px 0 18px}.brand-name{font-size:14px}.status{font-size:11px;max-width:45%}.metric{min-height:87px;padding:15px}.metric .value{font-size:28px}.metric .label{margin-top:8px}.tabs{width:100%}.tab{flex:1;min-width:0;padding:11px 6px}.logtools{gap:6px}.logtools .btn{padding-left:11px;padding-right:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="app">
+<header class="top">
+<div class="brand"><div class="brand-icon">S</div><div><div class="brand-name">Subscription Studio</div><div class="brand-sub">SURGE 6 · v3.4</div></div></div>
+<div id="status" class="status off"><span class="dot"></span><span id="statusText">读取中</span></div>
+</header>
+<section class="hero">
+<div class="hero-copy"><div class="eyebrow">SUBSCRIPTION CONTROL</div><h1>订阅管理</h1><div id="lastSync" class="hero-meta">尚无更新记录</div></div>
+<div class="hero-actions"><button id="refresh" class="btn btn-hero">↻ 刷新订阅</button><button id="copySubHero" class="btn btn-glass">复制链接</button></div>
+</section>
+<section class="metrics">
+<div class="metric first"><div id="total" class="value">—</div><div class="label">总节点</div></div>
+<div class="metric"><div id="ss" class="value">—</div><div class="label">SS</div></div>
+<div class="metric"><div id="anytls" class="value">—</div><div class="label">AnyTLS</div></div>
+<div class="metric"><div id="vless" class="value">—</div><div class="label">VLESS</div></div>
+<div class="metric"><div id="other" class="value">—</div><div class="label">其他</div></div>
+</section>
+<nav class="tabs" aria-label="页面切换">
+<button class="tab active" data-tab="overview" aria-selected="true">概览</button>
+<button class="tab" data-tab="nodes" aria-selected="false">节点</button>
+<button class="tab" data-tab="logs" aria-selected="false">日志 <em id="logsBadge">0</em></button>
+</nav>
+<section id="view-overview" class="stack">
+<div class="two">
+<div class="panel">
+<div class="panel-head"><h2>原始订阅</h2><button id="removeSource" class="btn btn-danger">移除</button></div>
+<div class="host" id="sourceHost">未配置</div>
+<div class="inputline"><input id="sourceInput" class="textinput" type="url" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" placeholder="粘贴订阅 URL"><button id="saveSource" class="btn btn-primary">保存</button></div>
+<div class="compat-line"><label for="compatibility">Surge 版本</label><select class="select" id="compatibility"><option value="6.0">iOS 6.0.x</option><option value="6.1">iOS 6.1+（需升级）</option></select></div><div class="compat-line"><label for="conversionMode">转换策略</label><select class="select" id="conversionMode"><option value="strict">严格：不跳过</option><option value="skip-fingerprint">跳过不兼容指纹</option></select></div>
+</div>
+<div class="panel">
+<div class="panel-head"><h2>转换订阅</h2><span id="updated" class="mini">—</span></div>
+<div class="mini-label">本地链接</div>
+<div class="endpoint" id="endpoint">surge-converter.test/subscription</div>
+<div class="output-actions"><button id="copySub" class="btn btn-primary">复制地址</button><button id="copyPolicy" class="btn">复制策略</button></div>
+</div>
+</div>
+<div class="panel error" id="errorPanel" hidden>
+<div class="panel-head"><h2 id="resultTitle">转换异常</h2><span id="errorCount" class="bad-count">—</span></div>
+<div id="issueList"></div>
+<div class="output-actions"><button id="openLogs" class="btn">查看日志</button></div>
+</div>
+</section>
+<section id="view-nodes" class="panel" hidden>
+<div class="panel-head"><h2>节点列表</h2><span id="nodeCount" class="mini">—</span></div>
+<div class="node-toolbar"><label class="searchbar"><input class="textinput" id="search" type="search" placeholder="搜索名称或地址"></label></div>
+<div class="filters" id="nodeFilters">
+<button class="filter active" data-type="all">全部</button><button class="filter" data-type="ss">SS</button><button class="filter" data-type="anytls">AnyTLS</button><button class="filter" data-type="vless">VLESS</button><button class="filter" data-type="trojan">Trojan</button><button class="filter" data-type="vmess">VMess</button><button class="filter" data-type="hysteria2">HY2</button><button class="filter" data-type="tuic">TUIC</button>
+</div>
+<div id="nodesList" class="node-list"></div>
+</section>
+<section id="view-logs" class="panel" hidden>
+<div class="panel-head"><h2>运行日志</h2><span id="logTotal" class="mini">0 条</span></div>
+<div class="logtools">
+<select id="logFilter" class="select" aria-label="日志筛选"><option value="all">全部事件</option><option value="error">失败</option><option value="success">成功</option><option value="warning">缓存回退</option></select>
+<button id="copyLogs" class="btn">复制日志</button><button id="clearLogs" class="btn btn-danger">清空</button>
+</div>
+<div id="logList" class="loglist" style="margin-top:16px"></div>
+</section>
+</main>
+<div id="toast" role="status" class="toast"></div><textarea id="clip" tabindex="-1" aria-hidden="true" style="position:fixed;top:-100px;left:-100px;opacity:0;width:1px;height:1px"></textarea>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const SUB="http://surge-converter.test/subscription";
+const POLICY="✈️ 我的节点 = select, policy-path="+SUB+", update-interval=1800";
+let nodes=[],logs=[],nodeType="all",configured=false,lastState=null,timer=0,activeTab="overview";
+const LOG_TITLE={refresh_ok:"订阅刷新成功",refresh_partial:"更新完成（已跳过节点）",refresh_error:"订阅刷新失败",cache_used:"已使用旧缓存",source_saved:"已保存订阅",source_removed:"已移除订阅",source_error:"订阅地址无效",compatibility_changed:"已切换 Surge 版本",conversion_mode_changed:"已切换转换策略"};
+const ISSUE_TITLE={network:"网络请求失败",http_status:"订阅接口异常",not_configured:"订阅未配置",empty_response:"订阅内容为空",conversion:"节点转换失败",format:"订阅格式异常"};
+async function req(path,options){const response=await fetch(path,Object.assign({cache:"no-store"},options||{}));const data=await response.json();if(!response.ok){const e=new Error(data.error||("HTTP "+response.status));e.info=data;throw e}return data}
+function toast(text){const e=$("toast");e.textContent=text;e.classList.add("show");clearTimeout(timer);timer=setTimeout(()=>e.classList.remove("show"),2200)}
+async function copy(text){try{if(!text)throw Error("内容为空");if(navigator.clipboard&&navigator.clipboard.writeText){await navigator.clipboard.writeText(text)}else throw Error("fallback")}catch(_){const e=$("clip");e.value=text;e.focus();e.select();if(!document.execCommand("copy")){toast("复制失败");return}}toast("已复制")}
+function time(iso){if(!iso)return"—";const d=new Date(iso);return Number.isNaN(d.getTime())?"—":d.toLocaleString("zh-CN",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"})}
+function setTab(name){activeTab=name;document.querySelectorAll(".tab").forEach(b=>{const on=b.dataset.tab===name;b.classList.toggle("active",on);b.setAttribute("aria-selected",on?"true":"false")});["overview","nodes","logs"].forEach(n=>{$("view-"+n).hidden=n!==name});if(name==="logs")fetchLogs().catch(()=>toast("读取日志失败"))}
+function setStatus(kind,text){const b=$("status");b.className="status "+kind;$("statusText").textContent=text}
+function showIssues(state){
+const partial=!!state.partial,failed=!!state.last_attempt_failed,el=$("errorPanel"),list=$("issueList"),
+issues=partial&&!failed?(Array.isArray(state.skipped_issues)?state.skipped_issues:[]):(Array.isArray(state.issues)?state.issues:[]);
+el.hidden=!(failed||partial);
+if(el.hidden)return;
+el.classList.toggle("notice",partial&&!failed);
+$("resultTitle").textContent=failed?"转换异常":"已跳过不兼容节点";
+$("errorCount").textContent=failed?(Number(state.failed||0)+" 条错误"):(Number(state.skipped||0)+" 条跳过");
+list.replaceChildren();
+if(!issues.length){const row=document.createElement("div");row.className="subtle";row.textContent=failed?"刷新失败，可查看运行日志":"可在日志中查看转换记录";list.appendChild(row);return}
+issues.forEach(item=>{const row=document.createElement("div");row.className="issue";const bold=document.createElement("strong");bold.textContent="第 "+Number(item.index||0)+" 行 · "+String(item.protocol||"unknown");const detail=document.createElement("span");detail.textContent=String(item.reason||"格式异常");row.append(bold,detail);list.appendChild(row)})
+}
+function paint(state){lastState=state;for(const key of ["total","ss","anytls","vless","other"])$(key).textContent=Number(state[key]||0).toLocaleString("zh-CN");configured=!!state.source_configured;const old=state.has_cache;if(state.last_attempt_failed)setStatus("warn",old?"使用旧缓存":"刷新失败");else if(state.partial)setStatus("warn","已跳过 "+Number(state.skipped||0)+" 条");else if(old)setStatus("","订阅正常");else if(configured)setStatus("off","尚未刷新");else setStatus("off","未配置");$("lastSync").textContent=(state.time?"更新于 "+time(state.time):"尚无更新记录")+(state.partial?" · 跳过 "+Number(state.skipped||0)+" 条":"");$("updated").textContent=state.time?time(state.time):"未更新";showIssues(state)}
+async function status(){const s=await req("/api/status?ts="+Date.now());paint(s);return s}
+function hostOf(summary){if(!summary)return"未配置";const m=String(summary).match(/^https?:\/\/([^/?#]+)/i);return m?m[1]:"已配置"}
+async function settings(){const r=await req('/api/settings?ts='+Date.now());$('compatibility').value=r.compatibility||'6.0';$('conversionMode').value=r.conversion_mode||'strict';return r}
+async function source(){const s=await req("/api/source?ts="+Date.now());configured=!!s.configured;$("sourceHost").textContent=hostOf(s.summary);$("removeSource").disabled=!configured;return s}
+function proxyNodes(text){const result=[];text.split(/\r?\n/).forEach(line=>{const m=line.match(/^\s*(.+?)\s*=\s*(ss|anytls|vless|trojan|vmess|hysteria2|tuic-v5|tuic|socks5|socks5-tls|http|https|snell|masque|wireguard|tailscale|ssh|trust-tunnel)\s*,\s*([^,]+)\s*,\s*([^,]+)/i);if(m)result.push({name:m[1].trim(),type:m[2].toLowerCase(),host:m[3].trim(),port:m[4].trim()})});return result}
+async function fetchNodes(){const r=await fetch("/api/output?ts="+Date.now(),{cache:"no-store"});nodes=r.ok?proxyNodes(await r.text()):[];renderNodes()}
+function renderNodes(){const q=$("search").value.trim().toLowerCase(),picked=nodes.filter(n=>(nodeType==="all"||n.type===nodeType||(nodeType==="tuic"&&n.type.indexOf("tuic")===0))&&(!q||(n.name+" "+n.host).toLowerCase().includes(q)));$("nodeCount").textContent=picked.length+" / "+nodes.length;const container=$("nodesList");container.replaceChildren();if(!picked.length){const empty=document.createElement("div");empty.className="empty";empty.style.gridColumn="1/-1";empty.textContent=nodes.length?"没有匹配的节点":"暂无节点";container.appendChild(empty);return}const fragment=document.createDocumentFragment();picked.forEach(node=>{const row=document.createElement("div");row.className="node";const mark=document.createElement("div");mark.className="node-mark";mark.textContent=node.type==="anytls"?"AT":node.type==="hysteria2"?"HY":node.type.slice(0,2).toUpperCase();const main=document.createElement("div");main.className="node-main";const name=document.createElement("div");name.className="node-name";name.textContent=node.name;const address=document.createElement("div");address.className="node-address";address.textContent=node.host+":"+node.port;main.append(name,address);const tag=document.createElement("span");tag.className="tag";tag.textContent=node.type;row.append(mark,main,tag);fragment.appendChild(row)});container.appendChild(fragment)}
+async function fetchLogs(){const data=await req("/api/logs?ts="+Date.now());logs=Array.isArray(data.entries)?data.entries:[];$("logsBadge").textContent=logs.length;$("logTotal").textContent=logs.length+" 条";renderLogs()}
+function logTitle(item){return LOG_TITLE[item.action]||"运行事件"}
+function logInfo(item){const bits=[];if(item.mode==="policy")bits.push("自动更新");else if(item.mode==="manual")bits.push("手动刷新");if(Number.isFinite(item.total))bits.push(item.total+" 个节点");if(Number.isFinite(item.failed))bits.push(item.failed+" 条失败");if(Number.isFinite(item.skipped))bits.push(item.skipped+" 条跳过");if(Number.isFinite(item.elapsed))bits.push(item.elapsed+" ms");if(item.http_status)bits.push("HTTP "+item.http_status);if(item.issue_type&&ISSUE_TITLE[item.issue_type])bits.push(ISSUE_TITLE[item.issue_type]);return bits.join(" · ")}
+function renderLogs(){const filter=$("logFilter").value;const items=logs.slice().reverse().filter(x=>filter==="all"||(filter==="error"&&x.level==="error")||(filter==="warning"&&x.level==="warning")||(filter==="success"&&(x.action==="refresh_ok"||x.action==="source_saved")));const root=$("logList");root.replaceChildren();if(!items.length){const empty=document.createElement("div");empty.className="empty";empty.textContent=logs.length?"没有匹配的日志":"暂无日志";root.appendChild(empty);return}const fragment=document.createDocumentFragment();items.forEach(item=>{const row=document.createElement("div");row.className="log-entry "+(item.level||"info");const head=document.createElement("div");head.className="log-top";const dot=document.createElement("i");dot.className="log-dot";const title=document.createElement("span");title.className="log-title";title.textContent=logTitle(item);const tm=document.createElement("time");tm.className="log-time";tm.textContent=time(item.time);head.append(dot,title,tm);row.appendChild(head);const inf=logInfo(item);if(inf){const meta=document.createElement("div");meta.className="log-meta";meta.textContent=inf;row.appendChild(meta)}if(Array.isArray(item.issues)&&item.issues.length){const details=document.createElement("details");details.className="log-issues";const summary=document.createElement("summary");summary.textContent="查看 "+item.issues.length+" 条详情";details.appendChild(summary);item.issues.forEach(issue=>{const d=document.createElement("div");d.className="log-issue";d.textContent="第 "+Number(issue.index||0)+" 行 · "+String(issue.protocol||"unknown")+" · "+String(issue.reason||"格式异常");details.appendChild(d)});row.appendChild(details)}fragment.appendChild(row)});root.appendChild(fragment)}
+async function refresh(){if(!configured){toast("请先保存订阅");setTab("overview");return}const btn=$("refresh");btn.disabled=true;btn.textContent="刷新中…";try{const s=await req("/api/convert",{method:"POST"});paint(s);await Promise.all([fetchNodes(),fetchLogs()]);toast(s.partial?"更新完成，跳过 "+s.skipped+" 条节点":"订阅已更新")}catch(e){if(e.info)paint(e.info);else await status().catch(()=>{});await fetchLogs().catch(()=>{});toast("刷新失败，已保留缓存");if(lastState&&lastState.last_attempt_failed)setTab("overview")}finally{btn.disabled=false;btn.textContent="↻ 刷新订阅"}}
+$("compatibility").addEventListener("change",async()=>{const e=$("compatibility");e.disabled=true;try{await req("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({compatibility:e.value})});await Promise.all([status(),fetchLogs()]);toast("已切换版本，重新刷新订阅")}catch(err){await settings().catch(()=>{});toast("切换失败")}finally{e.disabled=false}});
+$("conversionMode").addEventListener("change",async()=>{
+const selector=$("conversionMode"),wanted=selector.value;
+if(wanted==="skip-fingerprint"&&!confirm("不兼容指纹的节点将不包含在新订阅中，其余节点继续更新。确定开启？")){await settings().catch(()=>{});return}
+selector.disabled=true;
+try{await req("/api/settings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({conversion_mode:wanted})});await Promise.all([status(),fetchLogs()]);toast("策略已保存，点击刷新订阅")}catch(e){await settings().catch(()=>{});toast("设置保存失败")}finally{selector.disabled=false}
+});
+document.querySelectorAll("[data-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+document.querySelectorAll("[data-type]").forEach(b=>b.addEventListener("click",()=>{nodeType=b.dataset.type;document.querySelectorAll("[data-type]").forEach(x=>x.classList.toggle("active",x===b));renderNodes()}));
+$("search").addEventListener("input",renderNodes);
+$("logFilter").addEventListener("change",renderLogs);
+$("refresh").addEventListener("click",refresh);
+$("copySubHero").addEventListener("click",()=>copy(SUB));
+$("copySub").addEventListener("click",()=>copy(SUB));
+$("copyPolicy").addEventListener("click",()=>copy(POLICY));
+$("openLogs").addEventListener("click",()=>setTab("logs"));
+$("saveSource").addEventListener("click",async()=>{const input=$("sourceInput"),url=input.value.trim();if(!url){toast("请粘贴订阅地址");return}const btn=$("saveSource");btn.disabled=true;try{await req("/api/source",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({url})});input.value="";await Promise.all([source(),status(),fetchLogs()]);toast("已保存订阅")}catch(e){toast("保存失败，请检查链接")}finally{btn.disabled=false}});
+$("removeSource").addEventListener("click",async()=>{if(!configured)return;if(!confirm("移除原始订阅？已转换的节点缓存会保留。"))return;try{await req("/api/source",{method:"DELETE"});await Promise.all([source(),status(),fetchLogs()]);toast("订阅已移除")}catch(e){toast("移除失败")}});
+$("copyLogs").addEventListener("click",async()=>{if(!logs.length){toast("暂无日志");return}await copy(JSON.stringify({version:"3.4",exported_at:new Date().toISOString(),entries:logs},null,2))});
+$("clearLogs").addEventListener("click",async()=>{if(!logs.length){toast("暂无日志");return}if(!confirm("清空所有运行日志？"))return;try{await req("/api/logs",{method:"DELETE"});await fetchLogs();toast("日志已清空")}catch(e){toast("清空失败")}});
+Promise.all([source(),status(),fetchNodes(),fetchLogs(),settings()]).catch(()=>toast("读取状态失败"));
+</script>
+</body>
+</html>
