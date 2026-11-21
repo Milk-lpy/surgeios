@@ -1,0 +1,38 @@
+'use strict';
+const assert = require('node:assert/strict');
+const api = require('../Scripts/subscription-studio-v3.js');
+const id = '2cae91b3-f85c-433b-88ee-a002b9ed6d61';
+const ss = 'ss://' + Buffer.from('aes-128-gcm:password').toString('base64') + '@ss.example:8388#SS';
+function converts(input,match){const r=api.convertText(input);assert.equal(r.total,1);assert.match(r.output,match);return r}
+function rejects(input,needle){assert.throws(()=>api.convertText(input),e=>String(e.message).includes(needle))}
+converts(ss,/SS = ss, ss\.example, 8388/);
+converts(Buffer.from(ss).toString('base64'),/SS = ss/);
+converts('anytls://password@any.example:443?sni=any.example#Any',/Any = anytls, any\.example, 443/);
+const reality='vless://'+id+'@1.2.3.4:443?security=reality&pbk=RmdmRmdmRmdmRmdmRmdmRmdmRmdmRmdmRmdmRmdmRmA&sid=012345&flow=xtls-rprx-vision&sni=www.microsoft.com#Reality';
+let r=converts(reality,/reality-public-key=Rmdm/);assert.equal(r.vless,1);assert.match(r.output,/flow=xtls-rprx-vision/);
+converts('vless://'+id+'@cdn.example:443?security=tls&type=ws&host=front.example&path=%2Fws#WS',/ws-headers=Host:front\.example/);
+converts('vless://'+id+'@cdn.example:443?security=tls&type=httpupgrade&path=%2Fup#Upgrade',/ws-http-upgrade=true/);
+converts('vless://'+id+'@grpc.example:443?security=tls&type=grpc&serviceName=service#GRPC',/grpc-service-name=service/);
+converts('vless://'+id+'@x.example:443?security=tls&type=xhttp&mode=packet-up&path=%2Fx#XHTTP',/xhttp-mode=packet-up/);
+converts('trojan://pw@trojan.example:443?sni=host.example&type=ws&path=%2Fws#Trojan',/Trojan = trojan/);
+converts('hy2://pw@hy.example:443?obfs=salamander&obfs-password=obpw#HY2',/salamander-password=obpw/);
+converts('hysteria2://pw@hy.example:443,5000-5005#Hop',/port-hopping=443;5000-5005/);
+converts('tuic://'+id+':pw@tu.example:443#TUIC5',/tuic-v5.*uuid=/);
+converts('tuic://token@tu.example:443#TUIC4',/tuic.*token=token/);
+const vm={v:'2',ps:'VMess',add:'vm.example',port:'443',id,aid:'0',net:'ws',type:'none',host:'front.example',path:'/up',tls:'tls'};
+converts('vmess://'+Buffer.from(JSON.stringify(vm)).toString('base64'),/vmess-aead=true.*tls=true.*ws=true/);
+const native='[Proxy]\nNative = vless, 1.2.3.4, 443, username='+id+'\nSSNative = ss, ss.example, 8388, encrypt-method=aes-128-gcm, password=p\n[Proxy Group]\nG = select, Native';
+r=api.convertText(native);assert.equal(r.total,2);assert.equal(r.vless,1);assert.match(r.output,/SSNative = ss/);assert.doesNotMatch(r.output,/G = select/);
+r=api.convertText(ss+'\n'+ss);assert.equal(r.total,2);assert.match(r.output,/SS #2 = ss/);
+rejects('vless://'+id+'@x.example:443?type=kcp#KCP','传输类型');
+rejects('vless://'+id+'@x.example:443?type=grpc&security=none#Bad','需要 TLS');
+rejects('vless://'+id+'@x.example:443?security=tls&type=xhttp&extra=%7B%22downloadSettings%22%3A%7B%7D%7D#XHTTP','XHTTP extra');
+rejects('vless://'+id+'@x.example:443?security=reality&pbk=abcdef&fp=chrome#Fp','fp');
+rejects(ss.replace('#SS','?plugin=v2ray-plugin#SS'),'Shadowsocks 插件');
+rejects('hy2://pw@hy.example:443?obfs=not-supported#Bad','混淆');
+rejects(ss+'\nvless://'+id+'@x.example:443?type=kcp#Bad','保留旧缓存');
+rejects('{"error":"bad"}','JSON');
+rejects('proxies:\n - name: bad','YAML/Clash');
+const summary=api.maskSourceUrl('https://user:secret@example.com/sub/abc?token=short123');
+assert.equal(summary.includes('secret'),false);assert.equal(summary.includes('abc'),false);assert.equal(summary.includes('short123'),false);
+console.log('Surge Subscription Studio v3: all tests passed');
