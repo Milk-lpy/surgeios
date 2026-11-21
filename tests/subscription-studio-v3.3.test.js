@@ -27,7 +27,7 @@ r=api.convertText(ss+'\n'+ss);assert.equal(r.total,2);assert.match(r.output,/SS 
 rejects('vless://'+id+'@x.example:443?type=kcp#KCP','传输类型');
 rejects('vless://'+id+'@x.example:443?type=grpc&security=none#Bad','需要 TLS');
 rejects('vless://'+id+'@x.example:443?security=tls&type=xhttp&extra=%7B%22downloadSettings%22%3A%7B%7D%7D#XHTTP','XHTTP extra');
-rejects('vless://'+id+'@x.example:443?security=reality&pbk=abcdef&fp=chrome#Fp','fp');
+rejects('vless://'+id+'@x.example:443?security=reality&pbk=abcdef&fp=safari#Fp','6.1+');
 rejects(ss.replace('#SS','?plugin=v2ray-plugin#SS'),'Shadowsocks 插件');
 rejects('hy2://pw@hy.example:443?obfs=not-supported#Bad','混淆');
 rejects(ss+'\nvless://'+id+'@x.example:443?type=kcp#Bad','保留旧缓存');
