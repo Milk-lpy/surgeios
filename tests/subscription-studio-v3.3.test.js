@@ -1,6 +1,7 @@
 'use strict';
 const assert = require('node:assert/strict');
 const api = require('../Scripts/subscription-studio-v3.3.js');
+globalThis.$persistentStore={read:()=> '6.0'};
 const id = '2cae91b3-f85c-433b-88ee-a002b9ed6d61';
 const ss = 'ss://' + Buffer.from('aes-128-gcm:password').toString('base64') + '@ss.example:8388#SS';
 function converts(input,match){const r=api.convertText(input);assert.equal(r.total,1);assert.match(r.output,match);return r}
