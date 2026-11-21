@@ -42,13 +42,13 @@ http://surge-converter.test/
 ✈️ 我的节点 = select, policy-path=http://surge-converter.test/subscription, update-interval=1800
 ```
 
-**v3.3 支持：** Shadowsocks (SS)、AnyTLS、VLESS（REALITY / Vision / WS / HTTPUpgrade / gRPC / XHTTP 基础参数）、Trojan、VMess（v2rayN Base64 JSON）、Hysteria 2、TUIC v4/v5，以及 Surge 原生 `[Proxy]` 节点列表。原始列表可以是明文或 Base64 包装。
+**v3.4 支持：** Shadowsocks (SS)、AnyTLS、VLESS（REALITY / Vision / WS / HTTPUpgrade / gRPC / XHTTP 基础参数）、Trojan、VMess（v2rayN Base64 JSON）、Hysteria 2、TUIC v4/v5，以及 Surge 原生 `[Proxy]` 节点列表。原始列表可以是明文或 Base64 包装。
 
 **转换原则：** 如果检测到无法完整映射的节点或扩展参数，不自动生成残缺的新订阅；已有成功缓存可供回退。Clash YAML/JSON、SS 插件、VLESS XHTTP 高级 `extra` 配置以及部分特殊分享链接暂不支持。包含明确 `fp` 客户端指纹要求的 VLESS 链接在 Surge 6.0 兼容模式下拒绝静默丢参，6.1+ 用户可使用 Surge 原生分享链接导入。
 
 **隐私：** 原始订阅 URL 只保存在 Surge 本机 Persistent Store，不要提交到 GitHub。管理页仅显示脱敏的订阅主机名，隐藏路径与查询参数。订阅请求仍会访问原始订阅服务商。若要彻底清除历史节点，注意管理页的「移除」只清理原 URL，转换缓存仍会保留。
 
-**维护：** v3.1 脚本和页面保留供回退；主模块现引用 `Scripts/subscription-studio-v3.3.js` 和 `Web/subscription-studio-v3.3.html`。协议与异常转换回归测试位于 `tests/subscription-studio-v3.3.test.js`，可通过 `node tests/subscription-studio-v3.3.test.js` 执行。暂未在用户设备上的 Surge iOS 6 内完成端到端实测。
+**维护：** v3.1 脚本和页面保留供回退；主模块现引用 `Scripts/subscription-studio-v3.4.js` 和 `Web/subscription-studio-v3.4.html`。协议与异常转换回归测试位于 `tests/subscription-studio-v3.4.test.js`，可通过 `node tests/subscription-studio-v3.4.test.js` 执行。暂未在用户设备上的 Surge iOS 6 内完成端到端实测。
 
 
 ### v3.1 修复（2026-11-21）
@@ -76,3 +76,12 @@ http://surge-converter.test/
 - 保留 v3.2 独立文件作为回退。已完成协议和接口的模拟回归测试；尚未通过用户真实机场订阅或 iPhone 上 Surge 配置校验。
 
 官方参考： https://manual.nssurge.com/policies/overview.html 与 https://manual.nssurge.com/policies/tls.html
+
+### v3.4（2026-11-21）跳过不兼容指纹节点（可选）
+
+- **默认仍是严格转换**：任何不支持的节点均阻止更新，并保留上次可用的完整订阅缓存。
+- Surge 6.0.x 下，在「概览 → 原始订阅 → 转换策略」可选择「跳过不兼容指纹」。只有明确识别到 `Surge 6.0 不支持该 fp 指纹` 的节点才会被排除；其他不支持的协议、参数和非法格式仍阻止刷新。
+- 任何跳过会直接影响新订阅的节点集合，所以开启时有确认提示。**跳过的节点不会写入新订阅，也无法再由新订阅自动提供**；如需完整节点，请使用支持相应 `client-fingerprint` 的 Surge iOS 6.1+。
+- 刷新成功并部分跳过时，本地状态会展示实际节点数、跳过总数及逐行错误分类；日志记为 `refresh_partial`，级别为 warning，保留索引、协议、原因，不记录节点密码、订阅 Token 或服务器地址。
+- 如果所有节点都必须被跳过，则不会输出空订阅；其他错误仍需修复后才能更新。日志页同类错误改为可展开，默认折叠。
+- 仅做过模拟测试。无法保证用户的实际机场订阅 10 条均属于可跳过的明确指纹兼容错误，且不会对真实代理可连通性作保证。
