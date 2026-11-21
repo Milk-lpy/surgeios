@@ -1,4 +1,4 @@
-#!name=Surge Subscription Studio 6.1
+#!name=Surge Subscription Studio v3.1 (Surge 6)
 #!desc=Surge 6 订阅转换 Studio v3.1：修复 SIP002 地址端口末尾 / 兼容问题；支持 SS、AnyTLS、VLESS、Trojan、VMess、HY2、TUIC；逐行安全诊断，失败保留缓存。
 
 [General]
