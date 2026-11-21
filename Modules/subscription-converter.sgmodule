@@ -1,5 +1,5 @@
-#!name=Surge Subscription Studio v3.3
-#!desc=Surge 6 订阅转换器：兼容 VLESS fp 指纹（iOS 6.0 / 6.1+）、保留本机日志与节点缓存；支持 SS、AnyTLS、VLESS、Trojan、VMess、HY2、TUIC。
+#!name=Surge Subscription Studio v3.4
+#!desc=Surge 6 本机订阅转换器；新增可选跳过不兼容 VLESS 指纹节点、成功/跳过统计、折叠日志。默认严格转换，失败保护原有缓存。
 
 [General]
 force-http-engine-hosts = %APPEND% surge-converter.test
@@ -8,7 +8,7 @@ force-http-engine-hosts = %APPEND% surge-converter.test
 surge-converter.test = 127.0.0.1
 
 [Script]
-Subscription Studio 设置 = type=http-request, pattern=^http://surge-converter\.test/api/(?:source|settings)(?:\?|$), script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v3.3.js, script-update-interval=3600, requires-body=true, max-size=65536, timeout=15
-Subscription Studio 主服务 = type=http-request, pattern=^http://surge-converter\.test(?:/|$), script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v3.3.js, script-update-interval=3600, timeout=30
-打开 Subscription Studio = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v3.3.js, script-update-interval=3600, argument="__OPEN_WEB__", timeout=5
-复制当前节点 = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v3.3.js, script-update-interval=3600, argument="__COPY_CACHE__", timeout=10
+Subscription Studio 设置 = type=http-request, pattern=^http://surge-converter\.test/api/(?:source|settings)(?:\?|$), script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v3.4.js, script-update-interval=3600, requires-body=true, max-size=65536, timeout=15
+Subscription Studio 主服务 = type=http-request, pattern=^http://surge-converter\.test(?:/|$), script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v3.4.js, script-update-interval=3600, timeout=30
+打开 Subscription Studio = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v3.4.js, script-update-interval=3600, argument="__OPEN_WEB__", timeout=5
+复制当前节点 = type=generic, script-path=https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Scripts/subscription-studio-v3.4.js, script-update-interval=3600, argument="__COPY_CACHE__", timeout=10
