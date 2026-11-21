@@ -1,6 +1,6 @@
 // Surge Subscription Studio v3.2.1 — Surge 6 multi-protocol conversion
 (function(){'use strict';
-var KS='surge-subconverter-source-url-v1',KO='surge-subconverter-output-v1',KT='surge-subconverter-status-v1',KU='surge-subconverter-ui-v1',KF='surge-subconverter-failure-v1',KL='surge-subconverter-logs-v1';
+var KS='surge-subconverter-source-url-v1',KO='surge-subconverter-output-v1',KT='surge-subconverter-status-v1',KU='surge-subconverter-ui-v3.2',KF='surge-subconverter-failure-v1',KL='surge-subconverter-logs-v1';
 var UI='https://raw.githubusercontent.com/Milk-lpy/surgeios/main/Web/subscription-studio-v3.2.html';
 function du(s){try{return decodeURIComponent(s)}catch(_){return s}}
 function bb(x){var s=String(x||'').replace(/\s+/g,'').replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';var a='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/',o=[],i,c1,c2,c3,c4,n;for(i=0;i<s.length;i+=4){c1=a.indexOf(s[i]);c2=a.indexOf(s[i+1]);c3=s[i+2]==='='?-1:a.indexOf(s[i+2]);c4=s[i+3]==='='?-1:a.indexOf(s[i+3]);if(c1<0||c2<0||(c3<0&&s[i+2]!=='=')||(c4<0&&s[i+3]!=='='))throw Error('invalid base64');n=(c1<<18)|(c2<<12)|((c3<0?0:c3)<<6)|(c4<0?0:c4);o.push((n>>16)&255);if(c3>=0)o.push((n>>8)&255);if(c4>=0)o.push(n&255)}return o}
