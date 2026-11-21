@@ -142,6 +142,7 @@ delete globalThis.$persistentStore;
 
 
 // v3.4 opt-in partial conversion. Strict mode must remain the default.
+globalThis.$persistentStore={read:()=> '6.0'};
 const blocked='vless://'+id+'@blocked.example:443?security=tls&fp=chrome&sni=example.net#Blocked';
 const good='anytls://password@any.example:443?sni=any.example#Good';
 let skipError;
@@ -200,4 +201,5 @@ fpRes=send('/api/settings','POST',{requestBody:JSON.stringify({conversion_mode:'
 assert.equal(fpRes.status,200);
 assert.equal(JSON.parse(fpRes.body).conversion_mode,'strict');
 
+delete globalThis.$persistentStore;
 console.log('Surge Subscription Studio v3.4: all tests passed');
