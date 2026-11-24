@@ -1,0 +1,10 @@
+#!name=iPadn Local Loopback
+#!desc=LocalDevVPN compatibility test for iPadn
+
+[General]
+ipv6-vif = disabled
+tun-included-routes = %INSERT% 10.7.0.1/32
+skip-proxy = %INSERT% 10.7.0.1
+
+[IP Rewrite]
+10.7.0.1 = reflect
